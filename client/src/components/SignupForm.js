@@ -55,7 +55,7 @@ const SignupForm = () => {
   return (
     <>
       {/* This is needed for the validation functionality above */}
-      <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
+      <Form noValidate validated={validated} onSubmit={handleFormSubmit} className='bg-info border border-dark'>
         {/* show alert if server response is bad */}
         <Alert
           dismissible
@@ -75,6 +75,7 @@ const SignupForm = () => {
             onChange={handleInputChange}
             value={userFormData.username}
             required
+            className='border border-dark'
           />
           <Form.Control.Feedback type="invalid">
             Username is required!
@@ -90,6 +91,7 @@ const SignupForm = () => {
             onChange={handleInputChange}
             value={userFormData.email}
             required
+            className='border border-dark'
           />
           <Form.Control.Feedback type="invalid">
             Email is required!
@@ -105,6 +107,7 @@ const SignupForm = () => {
             onChange={handleInputChange}
             value={userFormData.password}
             required
+            className='border border-dark'
           />
           <Form.Control.Feedback type="invalid">
             Password is required!
