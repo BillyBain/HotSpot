@@ -1,6 +1,7 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
+require('dotenv').config();
 const { authMiddleware } = require('./utils/auth');
 
 const { typeDefs, resolvers } = require('./schemas');
@@ -14,6 +15,8 @@ const server = new ApolloServer({
   resolvers,
   context: authMiddleware,
 });
+
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
