@@ -1,4 +1,4 @@
-import key from '../../../server/utils/key'
+//import key from '../../../server/utils/key'
 
 // route to get logged in user's info (needs the token)
 export const getMe = (token) => {
@@ -55,5 +55,5 @@ export const deleteSearch = (searchId, token) => {
 // make a search to google books api
 // https://www.googleapis.com/books/v1/volumes?q=harry+potter
 export const searchGoogleBooks = (query) => {
-  return fetch(`https://www.googleapis.com/books/v1/volumes?${key}q=${query}`);
+  return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
 }; //revisit
