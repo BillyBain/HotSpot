@@ -9,12 +9,12 @@ const typeDefs = gql`
     savedSearches: [Location]
   }
 
+  
+
   type Location {
-    _id: ID!
-    searchId: String
-    description: String
-    name: String!
-    image: String
+    geo_description: String
+    name: String
+    map_image_url: String
   }
 
   input LocationInput {  
@@ -26,6 +26,7 @@ const typeDefs = gql`
 
   type Query {
     me: User
+    getLocations(name: String!): [Location]
   }
 
   type Mutation {
