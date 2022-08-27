@@ -43,14 +43,15 @@ export const SAVE_SEARCH = gql`
   }
 `;
 
-export const REMOVE_BOOK = gql`
-  mutation removeBook($bookId: ID!) {
-    removeBook(location_id: $bookId) {
+export const REMOVE_SEARCH = gql`
+  mutation removeLocation($location_id: ID!) {
+    removeLocation(location_id: $location_id) {
       _id
       username
       email
       saveCount
       savedSearches {
+        location_id
         geo_description
         name
         map_image_url

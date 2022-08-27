@@ -10,17 +10,18 @@ const typeDefs = gql`
   }
 
   type Location {
+    _id: ID!
     location_id: String
-    geo_description: String
     name: String
+    geo_description: String
     map_image_url: String
   }
 
-  input LocationInput {  
-    description: String!
-    name: String!
-    searchId: String
-    image: String
+  input LocationInput {
+    location_id: String
+    name: String
+    geo_description: String
+    map_image_url: String
   }
 
   type Query {
@@ -32,7 +33,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     saveLocation(locationData: LocationInput!): User
-    removeLocation(searchId: ID!): User
+    removeLocation(location_id: ID!): User
   }
 
   type Auth {

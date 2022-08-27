@@ -9,12 +9,12 @@ import {
 import Auth from '../utils/auth';
 import { removeSearchId } from '../utils/localStorage';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_ME } from '../utils/queries'; //revisit
-import { REMOVE_BOOK } from '../utils/mutations'; //revisit
+import { GET_ME } from '../utils/queries';
+import { REMOVE_SEARCH } from '../utils/mutations';
 
 const SavedSearches = () => {
   const { loading, data } = useQuery(GET_ME);
-  const [removeSearch, { error }] = useMutation(REMOVE_BOOK);//revisit
+  const [removeLocation, { error }] = useMutation(REMOVE_SEARCH);
 
   const userData = data?.me || {};
 
@@ -22,7 +22,7 @@ const SavedSearches = () => {
   const userDataLength = Object.keys(userData).length;
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
-  const handleDeleteSearch = async (searchId) => {
+  const handleDeleteSearch = async (location_id) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -30,11 +30,11 @@ const SavedSearches = () => {
     }
 
     try {
-      await removeSearch({
-        variables: { searchId },
+      await removeLocation({
+        variables: { location_id },
       });
 
-      removeSearchId(searchId);
+      removeSearchId(location_id);
     } catch (err) {
       console.error(err);
     }
@@ -56,28 +56,27 @@ const SavedSearches = () => {
         <h2>
           {userData.savedSearches.length
             ? `Viewing ${userData.savedSearches.length} saved ${
-                userData.savedSearches.length === 1 ? 'book' : 'books'//revisit
+                userData.savedSearches.length === 1 ? 'location' : 'locations'
               }:`
-            : 'You have no saved searches!'}
+            : 'You have no saved locations!'}
         </h2>
         <CardColumns>
-          {userData.savedSearches.map((search) => {
+          {userData.savedSearches.map((location) => {
             return (
-              <Card key={search.searchId} border="dark">
-                {search.image ? (
+              <Card key={location.location_id} border="dark">
+                {location.map_image_url ? (
                   <Card.Img
-                    src={search.image}
-                    alt={`The cover for ${search.title}`} //revisit
+                    src={location.map_image_url}
+                    alt={`Map for ${location.name}`}
                     variant="top"
                   />
                 ) : null}
                 <Card.Body>
-                  <Card.Title>{search.title}</Card.Title>
-                  <p className="small">Authors: {search.authors}</p>{/*revisit*/}
-                  <Card.Text>{search.description}</Card.Text>
+                  <Card.Title>{location.name}</Card.Title>
+                  <Card.Text>{location.geo_description}</Card.Text>
                   <Button
                     className="btn-block btn-danger"
-                    onClick={() => handleDeleteSearch(search.searchId)}
+                    onClick={() => handleDeleteSearch(location.location_id)}
                   >
                     Delete this Search!
                   </Button>
