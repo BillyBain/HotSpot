@@ -20,26 +20,24 @@ export const ADD_USER = gql`
         _id
         username
         email
-        bookCount
+        saveCount
       }
     }
   }
 `;
 
-export const SAVE_BOOK = gql`
-  mutation saveBook($bookData: BookInput!) {
-    saveBook(bookData: $bookData) {
+export const SAVE_SEARCH = gql`
+  mutation saveLocation($locationData: LocationInput!) {
+    saveLocation(locationData: $locationData) {
       _id
       username
       email
-      bookCount
-      savedBooks {
-        bookId
-        authors
-        image
-        link
-        title
-        description
+      saveCount
+      savedSearches {
+        location_id
+        geo_description
+        name
+        map_image_url
       }
     }
   }
@@ -47,18 +45,15 @@ export const SAVE_BOOK = gql`
 
 export const REMOVE_BOOK = gql`
   mutation removeBook($bookId: ID!) {
-    removeBook(bookId: $bookId) {
+    removeBook(location_id: $bookId) {
       _id
       username
       email
-      bookCount
-      savedBooks {
-        bookId
-        authors
-        image
-        link
-        title
-        description
+      saveCount
+      savedSearches {
+        geo_description
+        name
+        map_image_url
       }
     }
   }

@@ -11,59 +11,59 @@ import {
 } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import { saveSearchIds, getSavedSearchIds } from '../utils/localStorage';
-import { searchGoogleBooks } from '../utils/API'; //revisit
-import { SAVE_BOOK } from '../utils/mutations'; //revisit
-import { useMutation } from '@apollo/client';
+import { searchLocation } from '../utils/API';
+import { SAVE_SEARCH } from '../utils/mutations'; 
+import { useMutation, useLazyQuery } from '@apollo/client';
+import { QUERY_LOCATION } from '../utils/queries';
 
 const Searches = () => {
   // create state for holding returned google api data
-  const [searched, setSearch] = useState([]);
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
 
-  const [saveSearch, { error }] = useMutation(SAVE_BOOK); //revisit
+  const [saveLocation, { error }] = useMutation(SAVE_SEARCH);
+
+  const [seachLocations] = useLazyQuery(QUERY_LOCATION);
+  const [locations, setLocations] = useState([]);
 
   // create state to hold saved searchId values
   const [savedSearchIds, setSavedSearchIds] = useState(getSavedSearchIds());
 
-  useEffect(() => {
-    return () => saveSearchIds(savedSearchIds);
-  });
-
-  const handleFormSubmit = async (event) => {
+  // useEffect(() => {
+  //   return () => saveSearchIds(savedSearchIds);
+  // });
+  
+  const handleFormSubmit = async event => {
     event.preventDefault();
 
-    if (!searchInput) {
-      return false;
-    }
+    const name = searchInput
 
     try {
-      const response = await searchGoogleBooks(searchInput);
+      const results = await seachLocations({ variables: { name } })
+      
+      console.log (results)
 
-      if (!response.ok) {
+      if (!results.called) {
         throw new Error('something went wrong!');
       }
 
-      const { items } = await response.json();
-
-      const searchData = items.map((search) => ({
-        searchId: search.id,
-        authors: search.volumeInfo.authors || ['No author to display'],
-        title: search.volumeInfo.title,
-        description: search.volumeInfo.description,
-        image: search.volumeInfo.imageLinks?.thumbnail || '',
+      const locationData = results.data.getLocations.map((location) => ({
+        location_id: location.location_id,
+        name: location.name,
+        geo_description: location.geo_description,
+        map_image_url: location.map_image_url,
       }));
-
-      setSearch(searchData);
+      
+      setLocations(locationData);
       setSearchInput('');
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("Somethings wrong", error);
     }
-  };
-
-  const handleSaveSearch = async (searchId) => {
-    const searchesToSave = searched.find(
-      (search) => search.searchId === searchId
+  }
+  
+  const handleSaveSearch = async (location_id) => {
+    const searchesToSave = locations.find(
+      (search) => search.location_id === location_id
     );
 
     // get token
@@ -74,11 +74,11 @@ const Searches = () => {
     }
 
     try {
-      const { data } = await saveSearch({
+      const { data } = await saveLocation({
         variables: { searchData: { ...searchesToSave } },
       });
 
-      setSavedSearchIds([...savedSearchIds, searchesToSave.searchId]);
+      setSavedSearchIds([...savedSearchIds, searchesToSave.location_id]);
     } catch (err) {
       console.error(err);
     }
@@ -113,40 +113,36 @@ const Searches = () => {
 
       <Container>
         <h2 className="text-info">
-          {searched.length
-            ? `Viewing ${searched.length} results:`
+          {locations.length
+            ? `Viewing ${locations.length} results:`
             : 'Search to begin'}
         </h2>
         <CardColumns>
-          {searched.map((search) => {
+          {locations.map((location) => {
             return (
-              <Card key={search.searchId} border="dark">
-                {search.image
-                  ? ((
+              <Card key={location.location_id} border="dark">
+                {location.map_image_url
+                  ? (
                       <Card.Img
-                        src={search.image}
-                        alt={`The cover for ${search.title}`}
+                        src={location.map_image_url}
+                        alt={`Map of ${location.name}`}
                         variant="top"
                       />
-                    ),
-                    {
-                      /* revisit */
-                    })
+                    )
                   : null}
                 <Card.Body>
-                  <Card.Title>{search.title}</Card.Title>
-                  <p className="small">Authors: {search.authors}</p>
-                  <Card.Text>{search.description}</Card.Text>
+                  <Card.Title>{location.name}</Card.Title>
+                  <Card.Text>{location.geo_description}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
                       disabled={savedSearchIds?.some(
-                        (savedSearchId) => savedSearchId === search.searchId
+                        (savedSearchId) => savedSearchId === location.location_id
                       )}
                       className="btn-block btn-info"
-                      onClick={() => handleSaveSearch(search.searchId)}
+                      onClick={() => handleSaveSearch(location.location_id)}
                     >
                       {savedSearchIds?.some(
-                        (savedSearchId) => savedSearchId === search.searchId
+                        (savedSearchId) => savedSearchId === location.location_id
                       )
                         ? `You've already saved this!`
                         : 'Save this Search!'}
