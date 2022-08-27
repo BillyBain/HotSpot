@@ -1,18 +1,16 @@
 const { Schema } = require('mongoose');
 
-
 const locationSchema = new Schema({
+  geo_description: {
+    type: String,
+    required: true,
+  },
 
-  description: {
+  location_id: {
     type: String,
     required: true,
   },
-  
-  searchId: {
-    type: String,
-    required: true,
-  },
-  image: {
+  map_image_url: {
     type: String,
   },
 

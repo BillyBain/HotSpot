@@ -11,8 +11,8 @@ import {
 } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import { saveSearchIds, getSavedSearchIds } from '../utils/localStorage';
-import { searchLocation } from '../utils/API';
-import { SAVE_SEARCH } from '../utils/mutations'; 
+// import { searchLocation } from '../utils/API';
+import { SAVE_SEARCH } from '../utils/mutations';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import { QUERY_LOCATION } from '../utils/queries';
 
@@ -29,19 +29,19 @@ const Searches = () => {
   // create state to hold saved searchId values
   const [savedSearchIds, setSavedSearchIds] = useState(getSavedSearchIds());
 
-  // useEffect(() => {
-  //   return () => saveSearchIds(savedSearchIds);
-  // });
-  
-  const handleFormSubmit = async event => {
+  useEffect(() => {
+    return () => saveSearchIds(savedSearchIds);
+  });
+
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    const name = searchInput
+    const name = searchInput;
 
     try {
-      const results = await seachLocations({ variables: { name } })
-      
-      console.log (results)
+      const results = await seachLocations({ variables: { name } });
+
+      console.log(results);
 
       if (!results.called) {
         throw new Error('something went wrong!');
@@ -53,17 +53,17 @@ const Searches = () => {
         geo_description: location.geo_description,
         map_image_url: location.map_image_url,
       }));
-      
+
       setLocations(locationData);
       setSearchInput('');
     } catch (error) {
-      console.error("Somethings wrong", error);
+      console.error('Somethings wrong', error);
     }
-  }
-  
+  };
+
   const handleSaveSearch = async (location_id) => {
     const searchesToSave = locations.find(
-      (search) => search.location_id === location_id
+      (location) => location.location_id === location_id
     );
 
     // get token
@@ -75,7 +75,7 @@ const Searches = () => {
 
     try {
       const { data } = await saveLocation({
-        variables: { searchData: { ...searchesToSave } },
+        variables: { locationData: { ...searchesToSave } },
       });
 
       setSavedSearchIds([...savedSearchIds, searchesToSave.location_id]);
@@ -121,28 +121,28 @@ const Searches = () => {
           {locations.map((location) => {
             return (
               <Card key={location.location_id} border="dark">
-                {location.map_image_url
-                  ? (
-                      <Card.Img
-                        src={location.map_image_url}
-                        alt={`Map of ${location.name}`}
-                        variant="top"
-                      />
-                    )
-                  : null}
+                {location.map_image_url ? (
+                  <Card.Img
+                    src={location.map_image_url}
+                    alt={`Map of ${location.name}`}
+                    variant="top"
+                  />
+                ) : null}
                 <Card.Body>
                   <Card.Title>{location.name}</Card.Title>
                   <Card.Text>{location.geo_description}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
                       disabled={savedSearchIds?.some(
-                        (savedSearchId) => savedSearchId === location.location_id
+                        (savedSearchId) =>
+                          savedSearchId === location.location_id
                       )}
                       className="btn-block btn-info"
                       onClick={() => handleSaveSearch(location.location_id)}
                     >
                       {savedSearchIds?.some(
-                        (savedSearchId) => savedSearchId === location.location_id
+                        (savedSearchId) =>
+                          savedSearchId === location.location_id
                       )
                         ? `You've already saved this!`
                         : 'Save this Search!'}

@@ -1,7 +1,7 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { User } = require('../models');
 const { signToken } = require('../utils/auth');
-const { fetch } = require( 'cross-undici-fetch')
+const { fetch } = require('cross-undici-fetch');
 
 const api = process.env.API_KEY;
 const resolvers = {
@@ -15,18 +15,15 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
-    
 
-    getLocations: async (parent,{ name },context) => {
+    getLocations: async (parent, { name }, context) => {
       const response = await fetch(
         `https://travel-advisor.p.rapidapi.com/locations/search?query=${name}&rapidapi-key=${api}`
-      )
-      const json = await response.json()
+      );
+      const json = await response.json();
 
-      return json.data.map(obj=>obj.result_object);
-        
-      
-}
+      return json.data.map((obj) => obj.result_object);
+    },
   },
 
   Mutation: {
@@ -66,11 +63,11 @@ const resolvers = {
       throw new AuthenticationError('Please log in to save Locations.');
     },
 
-    removeLocation: async (parent, { searchId }, context) => {
+    removeLocation: async (parent, { location_id }, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedSearches: { searchId } } },
+          { $pull: { savedSearches: { location_id } } },
           { new: true }
         );
 
