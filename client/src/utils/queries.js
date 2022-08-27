@@ -6,15 +6,22 @@ export const GET_ME = gql`
       _id
       username
       email
-      bookCount
-      savedBooks {
-        bookId
-        title
-        image
-        authors
-        description
-        link
+      saveCount
+      savedSearches {
+        location_id
+        geo_description
+        name
+        map_image_url
       }
     }
   }
 `;
+export const QUERY_LOCATION = gql`
+query getLocations($name: String!) {
+  getLocations(name: $name) {
+    location_id
+    geo_description
+    name
+    map_image_url
+  }
+}`

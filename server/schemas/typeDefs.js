@@ -9,9 +9,8 @@ const typeDefs = gql`
     savedSearches: [Location]
   }
 
-  
-
   type Location {
+    location_id: String
     geo_description: String
     name: String
     map_image_url: String
