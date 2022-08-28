@@ -12,6 +12,8 @@ export const GET_ME = gql`
         geo_description
         name
         map_image_url
+        address
+        image
       }
     }
   }
@@ -23,5 +25,7 @@ query getLocations($name: String!) {
     geo_description
     name
     map_image_url
+    address
+    image
   }
 }`

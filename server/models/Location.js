@@ -1,4 +1,5 @@
 const { Schema } = require('mongoose');
+const { Array } = require('mongoose/lib/schema/index');
 
 const locationSchema = new Schema({
   geo_description: {
@@ -18,6 +19,12 @@ const locationSchema = new Schema({
     type: String,
     required: true,
   },
+  address: {
+    type: String,
+  },
+  image: {
+    type: String
+  }  
 });
 
 module.exports = locationSchema;

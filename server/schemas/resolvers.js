@@ -21,8 +21,18 @@ const resolvers = {
         `https://travel-advisor.p.rapidapi.com/locations/search?query=${name}&rapidapi-key=${api}`
       );
       const json = await response.json();
+      
+      let need = json.data.map((obj) => obj.result_object);
+      const photo = json.data.map((obj) => obj.result_object).map((obj1) => obj1.photo).map((obj2) => obj2.images).map((obj3) => obj3.original);
+      let final = [ ];
 
-      return json.data.map((obj) => obj.result_object);
+      for (let i = 0; i < need.length; i++) {
+        const element = need[i];
+        const image = photo.map((obj)=>obj.url)[i];
+        let allData = { ...element, image};
+        final.push(allData);
+      }
+      return final;
     },
   },
 

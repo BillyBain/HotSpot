@@ -38,6 +38,8 @@ export const SAVE_SEARCH = gql`
         geo_description
         name
         map_image_url
+        address
+        image
       }
     }
   }
@@ -55,6 +57,8 @@ export const REMOVE_SEARCH = gql`
         geo_description
         name
         map_image_url
+        address
+        image
       }
     }
   }
