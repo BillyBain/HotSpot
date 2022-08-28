@@ -70,9 +70,16 @@ const SavedSearches = () => {
                     alt={`Map for ${location.name}`}
                     variant="top"
                   />
+                ) : location.image ? (
+                  <Card.Img
+                    src={location.image}
+                    alt={`${location.name}`}
+                    variant="top"
+                  />
                 ) : null}
                 <Card.Body>
                   <Card.Title>{location.name}</Card.Title>
+                  <Card.Text>{location.address}</Card.Text>
                   <Card.Text>{location.geo_description}</Card.Text>
                   <Button
                     className="btn-block btn-danger"

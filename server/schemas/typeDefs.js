@@ -15,6 +15,8 @@ const typeDefs = gql`
     name: String
     geo_description: String
     map_image_url: String
+    address: String
+    image: String
   }
 
   input LocationInput {
@@ -22,6 +24,8 @@ const typeDefs = gql`
     name: String
     geo_description: String
     map_image_url: String
+    address: String
+    image: String
   }
 
   type Query {

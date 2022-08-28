@@ -52,6 +52,8 @@ const Searches = () => {
         name: location.name,
         geo_description: location.geo_description,
         map_image_url: location.map_image_url,
+        address: location.address,
+        image: location.image,
       }));
 
       setLocations(locationData);
@@ -127,9 +129,17 @@ const Searches = () => {
                     alt={`Map of ${location.name}`}
                     variant="top"
                   />
+                ) : location.image ? (
+                  <Card.Img
+                    src={location.image}
+                    alt={`${location.name}`}
+                    variant="top"
+                  />
                 ) : null}
+                
                 <Card.Body>
                   <Card.Title>{location.name}</Card.Title>
+                  <Card.Text>{location.address}</Card.Text>
                   <Card.Text>{location.geo_description}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
