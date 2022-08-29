@@ -88,7 +88,7 @@ const Searches = () => {
 
   return (
     <>
-      <Jumbotron fluid className="text-light bg-dark">
+      <Jumbotron fluid className="text-light bg-dark" id='background'>
         <Container>
           <h1 className="text-primary font-italic">Start a search!</h1>
           <Form onSubmit={handleFormSubmit}>
@@ -113,7 +113,7 @@ const Searches = () => {
         </Container>
       </Jumbotron>
 
-      <Container>
+      <Container id='searchResultsBackground'>
         <h2 className="text-info">
           {locations.length
             ? `Viewing ${locations.length} results:`

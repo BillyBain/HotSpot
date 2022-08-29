@@ -16,3 +16,12 @@ h6 {
   font-style: italic;
 }
 
+#background {
+  background-image:url(./images/upgraded-points-KVym2PAn1gA-unsplash.jpg);
+  background-size: 100%;
+}
+
+#searchResultsBackground {
+  background-image:url(./images/sean-oulashin-KMn4VEeEPR8-unsplash.jpg);
+  background-size: 100%;
+}
