@@ -11,13 +11,11 @@ import {
 } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import { saveSearchIds, getSavedSearchIds } from '../utils/localStorage';
-// import { searchLocation } from '../utils/API';
 import { SAVE_SEARCH } from '../utils/mutations';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import { QUERY_LOCATION } from '../utils/queries';
 
 const Searches = () => {
-  // create state for holding returned google api data
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
 
@@ -26,7 +24,6 @@ const Searches = () => {
   const [seachLocations] = useLazyQuery(QUERY_LOCATION);
   const [locations, setLocations] = useState([]);
 
-  // create state to hold saved searchId values
   const [savedSearchIds, setSavedSearchIds] = useState(getSavedSearchIds());
 
   useEffect(() => {
@@ -40,8 +37,6 @@ const Searches = () => {
 
     try {
       const results = await seachLocations({ variables: { name } });
-
-      console.log(results);
 
       if (!results.called) {
         throw new Error('something went wrong!');
@@ -88,9 +83,9 @@ const Searches = () => {
 
   return (
     <>
-      <Jumbotron fluid className="text-light bg-dark" id='background'>
+      <Jumbotron fluid className="text-light bg-dark" id="background">
         <Container>
-          <h1 className="text-primary font-italic">Start a search!</h1>
+          <h1 className="text-white">Location search:</h1>
           <Form onSubmit={handleFormSubmit}>
             <Form.Row>
               <Col xs={12} md={8}>
@@ -100,12 +95,12 @@ const Searches = () => {
                   onChange={(e) => setSearchInput(e.target.value)}
                   type="text"
                   size="lg"
-                  placeholder="Search"
+                  placeholder="Where do you want to go?"
                 />
               </Col>
               <Col xs={12} md={4}>
-                <Button type="submit" variant="success" size="lg">
-                  Submit Search
+                <Button type="submit" variant="primary" size="lg">
+                  Search
                 </Button>
               </Col>
             </Form.Row>
@@ -113,8 +108,8 @@ const Searches = () => {
         </Container>
       </Jumbotron>
 
-      <Container id='searchResultsBackground'>
-        <h2 className="text-info">
+      <Container id="searchResultsBackground">
+        <h2 className="text-white">
           {locations.length
             ? `Viewing ${locations.length} results:`
             : 'Search to begin'}
@@ -136,7 +131,7 @@ const Searches = () => {
                     variant="top"
                   />
                 ) : null}
-                
+
                 <Card.Body>
                   <Card.Title>{location.name}</Card.Title>
                   <Card.Text>{location.address}</Card.Text>
@@ -147,7 +142,7 @@ const Searches = () => {
                         (savedSearchId) =>
                           savedSearchId === location.location_id
                       )}
-                      className="btn-block btn-info"
+                      className="btn-block btn-primary"
                       onClick={() => handleSaveSearch(location.location_id)}
                     >
                       {savedSearchIds?.some(
@@ -155,7 +150,7 @@ const Searches = () => {
                           savedSearchId === location.location_id
                       )
                         ? `You've already saved this!`
-                        : 'Save this Search!'}
+                        : 'Save this Search'}
                     </Button>
                   )}
                 </Card.Body>

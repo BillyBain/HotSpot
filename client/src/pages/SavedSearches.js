@@ -49,7 +49,7 @@ const SavedSearches = () => {
     <>
       <Jumbotron fluid className="text-light bg-dark">
         <Container>
-          <h1>Viewing saved searches!</h1>
+          <h1>Your saved locations</h1>
         </Container>
       </Jumbotron>
       <Container>
@@ -85,7 +85,7 @@ const SavedSearches = () => {
                     className="btn-block btn-danger"
                     onClick={() => handleDeleteSearch(location.location_id)}
                   >
-                    Delete this Search!
+                    Delete this location
                   </Button>
                 </Card.Body>
               </Card>
