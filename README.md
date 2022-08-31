@@ -8,7 +8,7 @@
 
 Found in this repository is the codebase for the application HotSpot. Traveling and sightseeing are always fun, but trying to keep track of everything can be a hassle. What if there was a place to save it all and even continue the search! That is where HotSpot comes in with this React App you can create your own adventure database and never forget that Hot Spot again!
 
-![Application homepage gif](./assets/hotspot.gif)
+![Application homepage gif](./assets/hotspot-app.gif)
 
 ## Table of Contents
 
