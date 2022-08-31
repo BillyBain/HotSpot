@@ -47,52 +47,62 @@ const SavedSearches = () => {
 
   return (
     <>
-      <Jumbotron fluid className="text-light bg-dark">
+      <div id="savedResultsBackground">
+        <Jumbotron fluid className="text-white bg-dark" id="background">
+          <Container>
+            <h1 className="text-border">Your saved locations</h1>
+          </Container>
+        </Jumbotron>
         <Container>
-          <h1>Your saved locations</h1>
+          <h2 className="text-white text-border">
+            {userData.savedSearches.length
+              ? `Viewing ${userData.savedSearches.length} saved ${
+                  userData.savedSearches.length === 1 ? 'location' : 'locations'
+                }:`
+              : 'You have no saved locations!'}
+          </h2>
+          <CardColumns>
+            {userData.savedSearches.map((location) => {
+              return (
+                <Card key={location.location_id} border="dark">
+                  {location.map_image_url ? (
+                    <Card.Img
+                      src={location.map_image_url}
+                      alt={`Map for ${location.name}`}
+                      variant="top"
+                    />
+                  ) : location.image ? (
+                    <Card.Img
+                      src={location.image}
+                      alt={`${location.name}`}
+                      variant="top"
+                    />
+                  ) : null}
+                  <Card.Body>
+                    <Card.Title>
+                      <a
+                        href={`https://www.google.com/search?q=${location.name}`}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {location.name}
+                      </a>
+                    </Card.Title>
+                    <Card.Text>{location.address}</Card.Text>
+                    <Card.Text>{location.geo_description}</Card.Text>
+                    <Button
+                      className="btn-block btn-danger"
+                      onClick={() => handleDeleteSearch(location.location_id)}
+                    >
+                      Delete this location
+                    </Button>
+                  </Card.Body>
+                </Card>
+              );
+            })}
+          </CardColumns>
         </Container>
-      </Jumbotron>
-      <Container>
-        <h2>
-          {userData.savedSearches.length
-            ? `Viewing ${userData.savedSearches.length} saved ${
-                userData.savedSearches.length === 1 ? 'location' : 'locations'
-              }:`
-            : 'You have no saved locations!'}
-        </h2>
-        <CardColumns>
-          {userData.savedSearches.map((location) => {
-            return (
-              <Card key={location.location_id} border="dark">
-                {location.map_image_url ? (
-                  <Card.Img
-                    src={location.map_image_url}
-                    alt={`Map for ${location.name}`}
-                    variant="top"
-                  />
-                ) : location.image ? (
-                  <Card.Img
-                    src={location.image}
-                    alt={`${location.name}`}
-                    variant="top"
-                  />
-                ) : null}
-                <Card.Body>
-                  <Card.Title><a  href={`https://www.google.com/search?q=${location.name}`} rel="noreferrer" target="_blank">{location.name}</a></Card.Title>
-                  <Card.Text>{location.address}</Card.Text>
-                  <Card.Text>{location.geo_description}</Card.Text>
-                  <Button
-                    className="btn-block btn-danger"
-                    onClick={() => handleDeleteSearch(location.location_id)}
-                  >
-                    Delete this location
-                  </Button>
-                </Card.Body>
-              </Card>
-            );
-          })}
-        </CardColumns>
-      </Container>
+      </div>
     </>
   );
 };

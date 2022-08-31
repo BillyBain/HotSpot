@@ -19,9 +19,23 @@ h6 {
 #background {
   background-image:url(./images/upgraded-points-KVym2PAn1gA-unsplash.jpg);
   background-size: 100%;
+  border-bottom: 8px;
+  border-color: black;
+  border-style: solid;
 }
 
 #searchResultsBackground {
   background-image:url(./images/sean-oulashin-KMn4VEeEPR8-unsplash.jpg);
   background-size: 100%;
+  min-height: 100vh;
+}
+
+#savedResultsBackground {
+  background-image:url(./images/sai-kiran-anagani-83zRhEhFMfo-unsplash.jpg);
+  background-size: 100%;
+  min-height: 100vh;
+}
+
+.text-border {
+	text-shadow: 4px 4px 0 black, 4px 4px 0 black, 4px 4px
 }

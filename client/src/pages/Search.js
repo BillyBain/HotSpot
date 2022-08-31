@@ -35,10 +35,14 @@ const Searches = () => {
 
     const name = searchInput;
 
+    if (!name) {
+      return;
+    }
+
     try {
       const results = await seachLocations({ variables: { name } });
 
-      if (!results.called) {
+      if (!results) {
         throw new Error('something went wrong!');
       }
 
@@ -83,82 +87,91 @@ const Searches = () => {
 
   return (
     <>
-      <Jumbotron fluid className="text-light bg-dark" id="background">
+      <div id="searchResultsBackground">
+        <Jumbotron fluid className="text-light bg-dark" id="background">
+          <Container>
+            <h1 className="text-white text-border">Location search:</h1>
+            <Form onSubmit={handleFormSubmit}>
+              <Form.Row>
+                <Col xs={12} md={8}>
+                  <Form.Control
+                    name="searchInput"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    type="text"
+                    size="lg"
+                    placeholder="Where do you want to go?"
+                  />
+                </Col>
+                <Col xs={12} md={4}>
+                  <Button type="submit" variant="primary" size="lg">
+                    Search
+                  </Button>
+                </Col>
+              </Form.Row>
+            </Form>
+          </Container>
+        </Jumbotron>
         <Container>
-          <h1 className="text-white">Location search:</h1>
-          <Form onSubmit={handleFormSubmit}>
-            <Form.Row>
-              <Col xs={12} md={8}>
-                <Form.Control
-                  name="searchInput"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  type="text"
-                  size="lg"
-                  placeholder="Where do you want to go?"
-                />
-              </Col>
-              <Col xs={12} md={4}>
-                <Button type="submit" variant="primary" size="lg">
-                  Search
-                </Button>
-              </Col>
-            </Form.Row>
-          </Form>
+          <h2 className="text-white text-border">
+            {locations.length
+              ? `Viewing ${locations.length} results:`
+              : 'Search to begin'}
+          </h2>
+          <CardColumns>
+            {locations.map((location) => {
+              return (
+                <Card key={location.location_id} border="dark">
+                  {location.map_image_url ? (
+                    <Card.Img
+                      src={location.map_image_url}
+                      alt={`Map of ${location.name}`}
+                      variant="top"
+                    />
+                  ) : location.image ? (
+                    <Card.Img
+                      src={location.image}
+                      alt={`${location.name}`}
+                      variant="top"
+                    />
+                  ) : null}
+
+                  <Card.Body>
+                    <Card.Title>
+                      <a
+                        href={`https://www.google.com/search?q=${location.name}`}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {location.name}
+                      </a>
+                    </Card.Title>
+                    <Card.Text>{location.address}</Card.Text>
+                    <Card.Text>{location.geo_description}</Card.Text>
+                    {Auth.loggedIn() && (
+                      <Button
+                        disabled={savedSearchIds?.some(
+                          (savedSearchId) =>
+                            savedSearchId === location.location_id
+                        )}
+                        className="btn-block btn-primary"
+                        onClick={() => handleSaveSearch(location.location_id)}
+                      >
+                        {savedSearchIds?.some(
+                          (savedSearchId) =>
+                            savedSearchId === location.location_id
+                        )
+                          ? `You've already saved this!`
+                          : 'Save this Search'}
+                      </Button>
+                    )}
+                  </Card.Body>
+                </Card>
+              );
+            })}
+          </CardColumns>
         </Container>
-      </Jumbotron>
-
-      <Container id="searchResultsBackground">
-        <h2 className="text-white">
-          {locations.length
-            ? `Viewing ${locations.length} results:`
-            : 'Search to begin'}
-        </h2>
-        <CardColumns>
-          {locations.map((location) => {
-            return (
-              <Card key={location.location_id} border="dark">
-                {location.map_image_url ? (
-                  <Card.Img
-                    src={location.map_image_url}
-                    alt={`Map of ${location.name}`}
-                    variant="top"
-                  />
-                ) : location.image ? (
-                  <Card.Img
-                    src={location.image}
-                    alt={`${location.name}`}
-                    variant="top"
-                  />
-                ) : null}
-
-                <Card.Body>
-                  <Card.Title><a  href={`https://www.google.com/search?q=${location.name}`} rel="noreferrer" target="_blank">{location.name}</a></Card.Title>
-                  <Card.Text>{location.address}</Card.Text>
-                  <Card.Text>{location.geo_description}</Card.Text>
-                  {Auth.loggedIn() && (
-                    <Button
-                      disabled={savedSearchIds?.some(
-                        (savedSearchId) =>
-                          savedSearchId === location.location_id
-                      )}
-                      className="btn-block btn-primary"
-                      onClick={() => handleSaveSearch(location.location_id)}
-                    >
-                      {savedSearchIds?.some(
-                        (savedSearchId) =>
-                          savedSearchId === location.location_id
-                      )
-                        ? `You've already saved this!`
-                        : 'Save this Search'}
-                    </Button>
-                  )}
-                </Card.Body>
-              </Card>
-            );
-          })}
-        </CardColumns>
-      </Container>
+      </div>
     </>
   );
 };
