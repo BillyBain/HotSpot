@@ -29,8 +29,6 @@ To use this application, navigate to the website https://hotspot-search.herokuap
 
 Visitors to the site can use the search feature to search for locations, hotels, attractions, etc. They don't need to create an account to use the search functionality, but creating an account will allow users to save results from their searches to their accounts. By going to their saved locations, users can see any of the results that they have saved during their search. Once they no longer need that particular search feature, they can delete it.
 
-![Application demo video](./assets/hotspot-demo.mp4)
-
 ## How to Contribute
 
 [Contributor Covenant](https://www.contributor-covenant.org/)
