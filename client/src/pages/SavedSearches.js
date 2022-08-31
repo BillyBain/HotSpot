@@ -78,7 +78,7 @@ const SavedSearches = () => {
                   />
                 ) : null}
                 <Card.Body>
-                  <Card.Title>{location.name}</Card.Title>
+                  <Card.Title><a  href={`https://www.google.com/search?q=${location.name}`} rel="noreferrer" target="_blank">{location.name}</a></Card.Title>
                   <Card.Text>{location.address}</Card.Text>
                   <Card.Text>{location.geo_description}</Card.Text>
                   <Button
